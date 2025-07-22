@@ -9,6 +9,7 @@ class Solution:
             if (dir > 0 and index == 0) or index == numRows - 1:
                 dir += 1
 
+            print(i, index, char)
             output[index] += char
             
             if dir % 2 == 0:
