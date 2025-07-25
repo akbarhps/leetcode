@@ -1,24 +1,41 @@
+from typing import List
+
+
 class Solution:
-    def convert(self, s: str, numRows: int) -> str:
-        if numRows == 1: return s
-        output = ['' for _ in range(0, numRows)]
+    def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
+        if sum(gas) - sum(cost) < 0: return -1
+        datalen = len(gas)
 
-        dir = 0
-        index = 0
-        for i, char in enumerate(s):
-            if (dir > 0 and index == 0) or index == numRows - 1:
-                dir += 1
-
-            output[index] += char
+        startindex = 0
+        index = startindex + 1
+        curgas = gas[startindex]
+        while True:
+            index %= datalen
+            if index == startindex: break
             
-            if dir % 2 == 0:
-                index += 1
+            g = gas[index]
+            c = cost[index - 1]
+            if curgas - c < 0:
+                startindex = (startindex + 1) % datalen
+                index = startindex + 1
+                curgas = gas[startindex]
             else:
-                index -= 1
+                curgas += g
+            
+            index += 1
+            
+        return startindex
 
-        return ''.join(output)
 
+# gas = [1, 2, 3, 4, 5]
+# cost = [3, 4, 5, 1, 2]
+# gas = [5, 1, 2, 3, 4]
+# cost = [4, 4, 1, 5, 1]
+# gas = [2, 3, 4]
+# cost = [3, 4, 3]
+# gas = [5, 8, 2, 8]
+# cost = [6, 5, 6, 6]
 
-s = "ABC"
-numRows = 1
-print(Solution().convert(s, numRows))
+gas = [5,5,1,3,4]
+cost = [8,1,7,1,1]
+print(Solution().canCompleteCircuit(gas, cost))
